@@ -1,0 +1,67 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var root = Model.Root();
+    var menu = root.Children().Where(x => x.IsVisible() && x.ContentType.Alias != "projekt").ToList();
+
+    // "Kodhuset AB" -> "Kodhuset" + "AB" för loggan
+    var nameParts = (root.Name ?? "").Trim().Split(' ');
+    var brandMain = nameParts.Length > 1 ? string.Join(" ", nameParts.Take(nameParts.Length - 1)) : root.Name;
+    var brandSub = nameParts.Length > 1 ? nameParts.Last() : null;
+}
+<!doctype html>
+<html lang="sv">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@(Model.Id == root.Id ? root.Name : $"{Model.Name} – {root.Name}")</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+</head>
+<body>
+    <div class="topbar" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <a class="brand" href="@root.Url()">
+            <span class="brand-main">@brandMain</span>
+            @if (brandSub != null)
+            {
+                <span class="brand-sub">@brandSub</span>
+            }
+        </a>
+        @if (menu.Any())
+        {
+            <nav class="main-nav" aria-label="Huvudmeny">
+                <a href="@root.Url()" class="@(Model.Id == root.Id ? "active" : null)">Start</a>
+                @foreach (var item in menu)
+                {
+                    var active = Model.Id == item.Id || Model.IsDescendant(item);
+                    <a href="@item.Url()" class="@(active ? "active" : null)">@item.Name</a>
+                }
+            </nav>
+        }
+    </header>
+
+    <main class="site-main">
+        @if (Model.Id != root.Id)
+        {
+            <nav class="breadcrumbs" aria-label="Brödsmulor">
+                @foreach (var ancestor in Model.Ancestors().Reverse())
+                {
+                    <a href="@ancestor.Url()">@ancestor.Name</a>
+                    <span class="sep" aria-hidden="true">—</span>
+                }
+                <span aria-current="page">@Model.Name</span>
+            </nav>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <span class="line" aria-hidden="true"></span>
+        <p class="footer-brand">@root.Name</p>
+        <p class="footer-copy">&copy; @DateTime.Now.Year &middot; Alla rättigheter förbehållna</p>
+    </footer>
+</body>
+</html>

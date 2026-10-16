@@ -1,0 +1,92 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "~/Views/_Layout.cshtml";
+    var children = Model.Children().Where(x => x.IsVisible()).ToList();
+    var projekt = children.Where(x => x.ContentType.Alias == "projekt").ToList();
+    var sidor = children.Where(x => x.ContentType.Alias != "projekt").ToList();
+
+    // Valfritt: lägg till en bildväljare med alias "heroBild" på Startsida för en egen bakgrundsbild
+    var heroBild = Model.HasProperty("heroBild") && Model.HasValue("heroBild")
+        ? Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("heroBild")
+        : null;
+}
+<section class="hero" id="start" style="@(heroBild != null ? $"--hero-image: url('{heroBild.GetCropUrl(width: 1920)}')" : null)">
+    <div class="hero-inner">
+        <h1 class="hero-title">@Model.Name</h1>
+        <p class="hero-sub">webbutveckling &amp; systemintegration</p>
+        <a class="btn" href="#projekt">
+            <span class="btn-label">Se våra projekt</span>
+            <span class="btn-icon" aria-hidden="true">&#9660;</span>
+        </a>
+    </div>
+</section>
+
+<a class="scroll-cue" href="#projekt">
+    <span class="scroll-cue-label">Vad gör vi?</span>
+    <span class="scroll-cue-box" aria-hidden="true">&#9662;</span>
+</a>
+
+<section class="section" id="projekt">
+    <header class="section-head">
+        <p class="kicker">Utvalda case</p>
+        <h2>Projekt</h2>
+    </header>
+
+    @if (projekt.Any())
+    {
+        <div class="card-grid">
+            @foreach (var item in projekt)
+            {
+                @await Html.PartialAsync("~/Views/Partials/_Kort.cshtml", item)
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty">Inga projekt är publicerade ännu.</div>
+    }
+</section>
+
+@if (sidor.Any())
+{
+    <section class="section section-alt" id="om">
+        <header class="section-head">
+            <p class="kicker">Lär känna oss</p>
+            <h2>Mer om oss</h2>
+        </header>
+        <div class="card-grid">
+            @foreach (var item in sidor)
+            {
+                @await Html.PartialAsync("~/Views/Partials/_Kort.cshtml", item)
+            }
+        </div>
+    </section>
+}
+
+<nav class="dots" aria-label="Sektioner">
+    <a href="#start" class="active" aria-label="Till toppen"></a>
+    <a href="#projekt" aria-label="Projekt"></a>
+    @if (sidor.Any())
+    {
+        <a href="#om" aria-label="Mer om oss"></a>
+    }
+</nav>
+
+<script>
+    (function () {
+        var links = document.querySelectorAll('.dots a');
+        if (!('IntersectionObserver' in window) || !links.length) return;
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                links.forEach(function (a) {
+                    a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+                });
+            });
+        }, { rootMargin: '-45% 0px -45% 0px' });
+        links.forEach(function (a) {
+            var target = document.querySelector(a.getAttribute('href'));
+            if (target) observer.observe(target);
+        });
+    })();
+</script>

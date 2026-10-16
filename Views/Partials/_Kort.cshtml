@@ -1,0 +1,34 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPublishedContent>
+@{
+    var kund = Model.HasValue("kund") ? System.Text.RegularExpressions.Regex.Replace(Model.Value("kund")?.ToString() ?? "", "<.*?>", "").Trim() : null;
+    var teknik = Model.HasValue("teknik") ? Model.Value<IEnumerable<string>>("teknik") ?? Enumerable.Empty<string>() : Enumerable.Empty<string>();
+    var utdrag = Model.HasValue("utdrag") ? Model.Value<string>("utdrag") : null;
+    var bild = Model.HasValue("utvaldBild") ? Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("utvaldBild") : null;
+}
+<a class="card" href="@Model.Url()">
+    @if (bild != null)
+    {
+        <img class="card-image" src="@bild.GetCropUrl(width: 640, height: 360)" alt="@bild.Name" loading="lazy">
+    }
+    <div class="card-body">
+        @if (!string.IsNullOrWhiteSpace(kund))
+        {
+            <span class="card-eyebrow">@kund</span>
+        }
+        <h3 class="card-title">@Model.Name</h3>
+        @if (!string.IsNullOrWhiteSpace(utdrag))
+        {
+            <p class="card-text">@utdrag</p>
+        }
+        @if (teknik.Any())
+        {
+            <ul class="tags">
+                @foreach (var t in teknik)
+                {
+                    <li class="tag">@t</li>
+                }
+            </ul>
+        }
+    </div>
+    <span class="card-link">Visa mer <span aria-hidden="true">→</span></span>
+</a>

@@ -1,0 +1,34 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "~/Views/_Layout.cshtml";
+    var children = Model.Children().Where(x => x.IsVisible()).ToList();
+    var parent = Model.Parent();
+}
+<header class="page-head">
+    <p class="kicker">@(parent?.Name ?? "Kodhuset")</p>
+    <h1 class="page-title">@Model.Name</h1>
+    <span class="line" aria-hidden="true"></span>
+</header>
+
+@if (Model.HasValue("brodtext"))
+{
+    <div class="container-narrow prose">
+        @Model.Value("brodtext")
+    </div>
+}
+
+@if (children.Any())
+{
+    <section class="section">
+        <header class="section-head">
+            <p class="kicker">Läs vidare</p>
+            <h2>Undersidor</h2>
+        </header>
+        <div class="card-grid">
+            @foreach (var item in children)
+            {
+                @await Html.PartialAsync("~/Views/Partials/_Kort.cshtml", item)
+            }
+        </div>
+    </section>
+}

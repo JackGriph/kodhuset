@@ -1,0 +1,82 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "~/Views/_Layout.cshtml";
+    var kund = Model.HasValue("kund") ? Model.Value("kund")?.ToString() : null;
+    var teknik = Model.Value<IEnumerable<string>>("teknik") ?? Enumerable.Empty<string>();
+    var parent = Model.Parent();
+    var utdrag = Model.HasValue("utdrag") ? Model.Value<string>("utdrag") : null;
+    var bild = Model.HasValue("utvaldBild") ? Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("utvaldBild") : null;
+}
+@if (bild != null)
+{
+    <section class="hero hero-small" style="--hero-image: url('@bild.GetCropUrl(width: 1920)')">
+        <div class="hero-inner">
+            <p class="kicker kicker-light">Projekt</p>
+            <h1 class="hero-title">@Model.Name</h1>
+            @if (!string.IsNullOrWhiteSpace(utdrag))
+            {
+                <p class="hero-sub">@utdrag</p>
+            }
+        </div>
+    </section>
+}
+else
+{
+    <header class="page-head">
+        <p class="kicker">Projekt</p>
+        <h1 class="page-title">@Model.Name</h1>
+        @if (!string.IsNullOrWhiteSpace(utdrag))
+        {
+            <p class="page-lead">@utdrag</p>
+        }
+        <span class="line" aria-hidden="true"></span>
+    </header>
+}
+
+<div class="project-layout">
+    <article class="prose">
+        @if (Model.HasValue("beskrivning"))
+        {
+            @Model.Value("beskrivning")
+        }
+        else
+        {
+            <p class="muted">Ingen beskrivning har lagts till ännu.</p>
+        }
+    </article>
+
+    <aside class="facts">
+        <p class="kicker">Fakta</p>
+        <dl>
+            <dt>Kund</dt>
+            <dd class="facts-rich">@(string.IsNullOrWhiteSpace(kund) ? new HtmlString("–") : new HtmlString(kund))</dd>
+
+            <dt>Teknik</dt>
+            <dd>
+                @if (teknik.Any())
+                {
+                    <ul class="tags">
+                        @foreach (var t in teknik)
+                        {
+                            <li class="tag">@t</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span>–</span>
+                }
+            </dd>
+        </dl>
+    </aside>
+</div>
+
+@if (parent != null)
+{
+    <div class="back">
+        <a class="btn btn-outline" href="@parent.Url()">
+            <span class="btn-icon" aria-hidden="true">&#9664;</span>
+            <span class="btn-label">Tillbaka till @parent.Name</span>
+        </a>
+    </div>
+}

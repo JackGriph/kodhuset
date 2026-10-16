@@ -1,0 +1,458 @@
+@use "variabler" as v;
+@use "mixins" as m;
+
+// Hero
+.hero {
+  --hero-image: none; // sätts från mallen när det finns en bild
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: min(78vh, 640px);
+  padding: 80px v.$steg;
+  overflow: hidden;
+  color: v.$bakgrund;
+  text-align: center;
+  background-color: v.$hero-bakgrund;
+  background-image:
+    linear-gradient(rgba(40, 30, 35, .38), rgba(40, 30, 35, .38)),
+    var(--hero-image),
+    radial-gradient(ellipse 40% 55% at 38% 45%, #b98472 0%, transparent 70%),
+    radial-gradient(ellipse 45% 60% at 75% 55%, #d9cfc9 0%, transparent 70%),
+    radial-gradient(ellipse 35% 40% at 15% 70%, #efe6e0 0%, transparent 70%),
+    radial-gradient(ellipse 30% 35% at 60% 20%, #8c6f75 0%, transparent 70%),
+    linear-gradient(120deg, #c9b8b3, #8e7b7d);
+  background-size: cover;
+  background-position: center;
+
+  @include m.liten {
+    min-height: 70vh;
+  }
+
+  .btn {
+    margin-top: 44px;
+  }
+}
+
+.hero-inner {
+  position: relative;
+  max-width: 900px;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 8vw, 6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-right: -.12em; // kompenserar för letter-spacing på sista bokstaven
+}
+
+.hero-sub {
+  margin: 22px 0 0;
+  font-size: clamp(1rem, 2.4vw, 1.75rem);
+  font-weight: 300;
+  letter-spacing: .14em;
+}
+
+.hero-small {
+  min-height: 420px;
+
+  .hero-title {
+    font-size: clamp(1.8rem, 5vw, 3.4rem);
+    letter-spacing: .08em;
+    margin-right: -.08em;
+  }
+
+  .hero-sub {
+    max-width: 640px;
+    margin-inline: auto;
+    font-size: 1.05rem;
+    letter-spacing: .04em;
+  }
+}
+
+// Knappar
+.btn {
+  @include m.knapp(v.$primar, v.$bakgrund);
+
+  &:hover {
+    background: v.$primar-hover;
+    border-color: v.$primar-hover;
+    color: v.$bakgrund;
+  }
+}
+
+.btn-outline {
+  @include m.knapp(v.$bakgrund, v.$primar);
+
+  &:hover {
+    background: v.$primar;
+    color: v.$bakgrund;
+  }
+
+  .btn-icon {
+    border-left: 0;
+    border-right: 1px solid v.$primar-ljus;
+  }
+}
+
+.btn-label {
+  padding: 22px 40px;
+
+  @include m.liten {
+    padding: 18px 22px;
+  }
+}
+
+.btn-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  border-left: 1px solid rgba(255, 255, 255, .35);
+  font-size: .8rem;
+  letter-spacing: 0;
+
+  @include m.liten {
+    width: 52px;
+  }
+}
+
+// "Vad gör vi?" under hero
+.scroll-cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$steg;
+  padding: 36px v.$steg 0;
+  color: v.$primar;
+
+  &::after {
+    content: "";
+    @include m.linje(28px);
+  }
+
+  &:hover .scroll-cue-box {
+    background: v.$primar;
+    color: v.$bakgrund;
+  }
+}
+
+.scroll-cue-label {
+  @include m.versaler(.74rem, .2em);
+}
+
+.scroll-cue-box {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid v.$primar-ljus;
+  font-size: .7rem;
+  transition: background .2s ease, color .2s ease;
+}
+
+// Sektioner
+.section {
+  max-width: v.$maxbredd;
+  margin: 0 auto;
+  padding: 72px 20px;
+  scroll-margin-top: 20px;
+
+  @include m.liten {
+    padding: 56px v.$steg;
+  }
+}
+
+.section-alt {
+  max-width: none;
+  background: v.$bakgrund-alt;
+  border-top: 1px solid v.$ram;
+
+  > * {
+    max-width: v.$maxbredd - 40px;
+    margin-inline: auto;
+  }
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 44px;
+
+  h2 {
+    font-family: v.$serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 500;
+  }
+}
+
+// Sidhuvud på undersidor
+.page-head {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 56px 20px 8px;
+  text-align: center;
+}
+
+.page-title {
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.page-lead {
+  max-width: 620px;
+  margin: 18px auto 0;
+  color: v.$text-dampad;
+  font-size: 1.15rem;
+  font-weight: 300;
+}
+
+// Brödtext
+.container-narrow {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 20px 72px;
+}
+
+.prose {
+  font-size: 1.05rem;
+
+  > :first-child { margin-top: 0; }
+  > :last-child { margin-bottom: 0; }
+
+  p { margin: 0 0 1.1em; }
+
+  h2,
+  h3 {
+    font-family: v.$serif;
+    font-weight: 600;
+    margin: 1.6em 0 .5em;
+  }
+
+  h2 { font-size: 1.9rem; }
+  h3 { font-size: 1.5rem; }
+
+  ul,
+  ol { padding-left: 1.3em; }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  blockquote {
+    margin: 1.5em 0;
+    padding-left: 20px;
+    border-left: 2px solid v.$primar;
+    font-family: v.$serif;
+    font-style: italic;
+    font-size: 1.4rem;
+  }
+}
+
+// Kort
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: v.$bakgrund;
+  border: 1px solid v.$ram;
+  color: v.$text;
+  transition: transform .25s ease, box-shadow .25s ease;
+
+  // Korallstreck som växer fram överst vid hover
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -1px;
+    z-index: 1;
+    width: 0;
+    height: 2px;
+    background: v.$primar;
+    transition: width .3s ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: v.$text;
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(43, 43, 51, .08);
+
+    &::before { width: 100%; }
+
+    .card-link span { transform: translateX(4px); }
+  }
+}
+
+.card-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.card-body {
+  flex: 1;
+  padding: 30px 28px 8px;
+  text-align: center;
+
+  .tags { justify-content: center; }
+}
+
+.card-eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  color: v.$primar;
+  @include m.versaler(.68rem, .2em);
+}
+
+.card-title {
+  margin-bottom: 12px;
+  font-family: v.$serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.card-text {
+  display: -webkit-box;
+  margin: 0 0 v.$steg;
+  overflow: hidden;
+  color: v.$text-dampad;
+  font-size: .92rem;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.card-link {
+  display: block;
+  padding: 18px 28px 26px;
+  text-align: center;
+  color: v.$primar;
+  @include m.versaler(.68rem, .22em);
+
+  span {
+    display: inline-block;
+    margin-left: 4px;
+    transition: transform .2s ease;
+  }
+}
+
+// Taggar
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 3px 10px;
+  border: 1px solid v.$primar-ljus;
+  color: v.$primar;
+  @include m.versaler(.66rem, .12em);
+  font-weight: 600;
+}
+
+// Projektsida
+.project-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 56px;
+  align-items: start;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 20px 24px;
+
+  @include m.mobil {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.facts {
+  position: sticky;
+  top: 32px;
+  padding: 28px;
+  background: v.$bakgrund-alt;
+  border-top: 2px solid v.$primar;
+
+  @include m.mobil {
+    position: static;
+  }
+
+  dl { margin: 0; }
+
+  dt {
+    margin-bottom: 4px;
+    color: v.$text-dampad;
+    font-family: v.$serif;
+    font-style: italic;
+    font-size: 1.05rem;
+  }
+
+  dd {
+    margin: 0 0 20px;
+    font-weight: 500;
+
+    &:last-child { margin-bottom: 0; }
+  }
+}
+
+.facts-rich p {
+  margin: 0;
+}
+
+.back {
+  padding: 32px 20px 80px;
+  text-align: center;
+}
+
+.empty {
+  padding: 48px;
+  text-align: center;
+  color: v.$text-dampad;
+  border: 1px dashed v.$primar-ljus;
+}
+
+// Sektionsromber på startsidan
+.dots {
+  position: fixed;
+  right: 26px;
+  top: 50%;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  transform: translateY(-50%);
+
+  @include m.mobil {
+    display: none;
+  }
+
+  a {
+    display: block;
+    width: 9px;
+    height: 9px;
+    background: v.$primar-ljus;
+    transform: rotate(45deg);
+    transition: background .2s ease, transform .2s ease;
+
+    &:hover { background: v.$primar; }
+
+    &.active {
+      background: v.$primar;
+      transform: rotate(45deg) scale(1.35);
+    }
+  }
+}
