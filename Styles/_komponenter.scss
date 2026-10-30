@@ -146,11 +146,17 @@
 }
 
 // Kort
+// Flexbox i stället för grid, så att ett ensamt kort på sista raden hamnar i mitten
 .card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 340px));
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 24px;
+
+  > .card {
+    flex: 1 1 260px;
+    max-width: 330px;
+  }
 }
 
 .card {
