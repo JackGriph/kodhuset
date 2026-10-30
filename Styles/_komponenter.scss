@@ -95,9 +95,18 @@
   }
 }
 
+.section-tight {
+  padding-top: 8px;
+}
+
+.section-kicker {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
 .section-head,
 .page-head {
-  margin: 0 auto 40px;
+  margin: 0 auto 32px;
   text-align: center;
 }
 
@@ -127,7 +136,8 @@
 .container-narrow {
   max-width: 720px;
   margin: 0 auto;
-  padding: 0 20px 64px;
+  padding: 0 20px 40px;
+  font-size: 1.1rem;
 }
 
 .prose img {
@@ -138,7 +148,8 @@
 // Kort
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 340px));
+  justify-content: center;
   gap: 24px;
 }
 
@@ -281,4 +292,10 @@
       background: v.$primar;
     }
   }
+}
+
+// Brödtext på vanliga sidor visas centrerad som ingress under rubriken
+.page-intro {
+  text-align: center;
+  color: v.$text-dampad;
 }

@@ -1,0 +1,21 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Medarbetare>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "~/Views/_Layout.cshtml";
+}
+<header class="page-head">
+    @if (Model.HasValue("roll"))
+    {
+        <p class="kicker">@Model.Value("roll")</p>
+    }
+    <h1 class="page-title">@(Model.HasValue("namn") ? Model.Value("namn") : Model.Name)</h1>
+    <span class="line" aria-hidden="true"></span>
+</header>
+
+@if (Model.HasValue("presentation"))
+{
+    <div class="container-narrow prose">
+        @Model.Value("presentation")
+    </div>
+}

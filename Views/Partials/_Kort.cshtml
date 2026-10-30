@@ -2,7 +2,21 @@
 @{
     var kund = Model.HasValue("kund") ? System.Text.RegularExpressions.Regex.Replace(Model.Value("kund")?.ToString() ?? "", "<.*?>", "").Trim() : null;
     var teknik = Model.HasValue("teknik") ? Model.Value<IEnumerable<string>>("teknik") ?? Enumerable.Empty<string>() : Enumerable.Empty<string>();
-    var utdrag = Model.HasValue("utdrag") ? Model.Value<string>("utdrag") : null;
+    var roll = Model.HasValue("roll") ? Model.Value<string>("roll") : null;
+    var etikett = !string.IsNullOrWhiteSpace(kund) ? kund : roll;
+
+    // Utdrag om det finns, annars början av brödtext/presentation utan HTML
+    string utdrag = Model.HasValue("utdrag") ? Model.Value<string>("utdrag") : null;
+    if (string.IsNullOrWhiteSpace(utdrag))
+    {
+        var falt = new[] { "brodtext", "presentation", "beskrivning" }.FirstOrDefault(a => Model.HasValue(a));
+        if (falt != null)
+        {
+            var text = System.Text.RegularExpressions.Regex.Replace(Model.Value(falt)?.ToString() ?? "", "<.*?>", " ");
+            text = System.Text.RegularExpressions.Regex.Replace(System.Net.WebUtility.HtmlDecode(text), @"\s+", " ").Trim();
+            utdrag = text.Length > 140 ? text.Substring(0, 140).TrimEnd() + "…" : text;
+        }
+    }
     var bild = Model.HasValue("utvaldBild") ? Model.Value<Umbraco.Cms.Core.Models.MediaWithCrops>("utvaldBild") : null;
 }
 <a class="card" href="@Model.Url()">
@@ -11,9 +25,9 @@
         <img class="card-image" src="@bild.GetCropUrl(width: 640, height: 360)" alt="@bild.Name" loading="lazy">
     }
     <div class="card-body">
-        @if (!string.IsNullOrWhiteSpace(kund))
+        @if (!string.IsNullOrWhiteSpace(etikett))
         {
-            <span class="card-eyebrow">@kund</span>
+            <span class="card-eyebrow">@etikett</span>
         }
         <h3 class="card-title">@Model.Name</h3>
         @if (!string.IsNullOrWhiteSpace(utdrag))

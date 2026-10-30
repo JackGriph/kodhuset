@@ -12,18 +12,15 @@
 
 @if (Model.HasValue("brodtext"))
 {
-    <div class="container-narrow prose">
+    <div class="container-narrow prose page-intro">
         @Model.Value("brodtext")
     </div>
 }
 
 @if (children.Any())
 {
-    <section class="section">
-        <header class="section-head">
-            <p class="kicker">Läs vidare</p>
-            <h2>Undersidor</h2>
-        </header>
+    <section class="section section-tight">
+        <p class="kicker section-kicker">Läs mer om @Model.Name</p>
         <div class="card-grid">
             @foreach (var item in children)
             {
