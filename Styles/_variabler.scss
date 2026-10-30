@@ -1,23 +1,19 @@
-// Färger – kontrast mot vitt (#ffffff) inom parentes, krav 4.5:1 för vanlig text
+// Färger – kontrast mot vitt inom parentes (krav 4.5:1)
 $text: #2b2b33;          // 14.04:1
-$text-dampad: #6e6e7a;   // 5.03:1 (4.76:1 mot $bakgrund-alt)
+$text-dampad: #6e6e7a;   // 5.03:1
 $bakgrund: #ffffff;
 $bakgrund-alt: #fbf8f8;
 $ram: #ececf0;
-
-$primar: #d63a44;        // 4.62:1 – korall, används för text, länkar och knappar
-$primar-hover: #b8303a;  // mörkare korall för hover
-$primar-ljus: #f6b5b9;   // bara dekor (linjer, ramar), aldrig text
-$sekundar: #5b3fd6;      // lila i toppremsan
-$hero-bakgrund: #6e5a5c; // vit text mot denna: 6.4:1
+$primar: #d63a44;        // 4.62:1
+$primar-hover: #b8303a;
+$primar-ljus: #f6b5b9;   // bara linjer och ramar, aldrig text
+$hero: #6e5a5c;          // vit text: 6.4:1
 
 // Typsnitt
 $serif: "Cormorant Garamond", Georgia, serif;
-$sans: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+$sans: "Montserrat", system-ui, sans-serif;
 
 // Mått
 $steg: 16px;
-$maxbredd: 1140px;
+$maxbredd: 1100px;
 $brytpunkt: 860px;
-$brytpunkt-liten: 520px;
-$fokus-bredd: 3px;

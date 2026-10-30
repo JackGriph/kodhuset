@@ -1,43 +1,23 @@
 @use "variabler" as v;
 
-// Mobilläge (surfplatta och mindre)
 @mixin mobil {
   @media (max-width: v.$brytpunkt) {
     @content;
   }
 }
 
-// Liten mobil
-@mixin liten {
-  @media (max-width: v.$brytpunkt-liten) {
-    @content;
-  }
-}
-
-// Små versaler med glest teckenavstånd – används i meny, etiketter och knappar
-@mixin versaler($storlek: .72rem, $spatiering: .2em) {
+// Små versaler med glest teckenavstånd
+@mixin versaler($storlek: .72rem) {
   font-size: $storlek;
   font-weight: 700;
-  letter-spacing: $spatiering;
+  letter-spacing: .2em;
   text-transform: uppercase;
 }
 
-// Knapp med pilruta
 @mixin knapp($bakgrund, $textfarg) {
   display: inline-flex;
-  align-items: stretch;
   background: $bakgrund;
   color: $textfarg;
   border: 1px solid v.$primar;
-  text-decoration: none;
-  transition: background .2s ease, color .2s ease;
-  @include versaler(.78rem, .24em);
-}
-
-// Tunn vertikal dekorlinje
-@mixin linje($hojd: 48px) {
-  display: block;
-  width: 1px;
-  height: $hojd;
-  background: v.$primar-ljus;
+  @include versaler(.75rem);
 }
